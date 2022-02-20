@@ -5,7 +5,17 @@ $ cp .env.example .env
 # Edit .env
 $ vim .env
 
-$ PIPENV_VENV_IN_PROJECT=1 pipenv install -d
+$ docker-compose build
+$ docker-compose up -d
+$ docker attach life_recorder_web_1
+$ docker-compose exec web bash
+# python ml_sample/manage.py createsuperuser
+>> ** Input information of your superuser! **
 ```
 
+Then, you can access
 
+- Django Admin  
+`localhost:8000/admin`
+- App Top  
+`localhost:8000/hello`
