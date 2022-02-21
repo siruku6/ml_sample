@@ -9,7 +9,7 @@ $ docker-compose build
 $ docker-compose up -d
 $ docker attach life_recorder_web_1
 $ docker-compose exec web bash
-# python ml_sample/manage.py createsuperuser
+# python manage.py createsuperuser
 >> ** Input information of your superuser! **
 ```
 

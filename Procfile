@@ -1,1 +1,1 @@
-web: gunicorn ml_sample.ml_sample.wsgi
+web: gunicorn ml_sample.wsgi

@@ -4,5 +4,5 @@
 pipenv lock -r --dev > requirements.txt
 pip install -r requirements.txt
 
-python ml_sample/manage.py migrate
-python ml_sample/manage.py runserver 0.0.0.0:8000
+python manage.py migrate
+python manage.py runserver 0.0.0.0:8000
