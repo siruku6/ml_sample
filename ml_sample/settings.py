@@ -14,13 +14,16 @@ from pathlib import Path
 import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env(
     DEBUG=(bool, False),
+    ENVIRONMENT=(str, None)
 )
 env_file = str(BASE_DIR.joinpath('.env'))
 env.read_env(env_file)
+VIRTUAL_ENVIRONMENT = env('ENVIRONMENT')
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -83,24 +86,29 @@ WSGI_APPLICATION = 'ml_sample.wsgi.application'
 #        Database
 ###########################
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': env('POSTGRES_PASSWORD'),
-        'HOST': 'postgres',
-        'PORT': 5432,
-        'TEST': {
-            'NAME': 'life_record_test',
-        },
+if VIRTUAL_ENVIRONMENT == 'heroku':
+    import dj_database_url
+    db_from_env = dj_database_url.config()
+    DATABASES = {
+        'default': db_from_env
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'postgres',
+            'USER': 'postgres',
+            'PASSWORD': env('POSTGRES_PASSWORD'),
+            'HOST': 'postgres',
+            'PORT': 5432,
+            'TEST': {
+                'NAME': 'life_record_test',
+            },
+        }
+    }
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
@@ -140,3 +148,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+
+# heroku settings
+import django_heroku
+django_heroku.settings(locals())
