@@ -1,1 +1,1 @@
-web: gunicorn ml_sample.wsgi
+web: gunicorn config.wsgi
