@@ -1,0 +1,18 @@
+<table>
+  <tr>
+    <th>id</th><td>{{ object.id }}</td>
+  </tr>
+  <tr>
+    <th>date</th><td>{{ diary.date }}</td>
+  </tr>
+  <tr>
+    <th>title</th><td>{{ diary.title }}</td>
+  </tr>
+  <tr>
+    <th>content</th><td>{{ diary.text }}</td>
+  </tr>
+</table>
+
+<a href="{% url 'list' %}">
+  <button type="button">戻る</button>
+</a>

@@ -7,6 +7,7 @@ services:
     command: ./docker/web/cmd.sh
     environment:
       - TZ=Asia/Tokyo
+      - ENVIRONMENT=docker
       - POSTGRES_PASSWORD=password
     volumes:
       - .:/opt

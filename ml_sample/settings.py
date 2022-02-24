@@ -92,7 +92,7 @@ if VIRTUAL_ENVIRONMENT == 'heroku':
     DATABASES = {
         'default': db_from_env
     }
-else:
+elif VIRTUAL_ENVIRONMENT == 'docker':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -106,6 +106,9 @@ else:
             },
         }
     }
+# NOTE: reach this branch when running test or mypy
+else:
+    DATABASES = {}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -136,7 +139,8 @@ AUTH_PASSWORD_VALIDATORS = [
 #################################
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ja'
 TIME_ZONE = 'Asia/Tokyo'
 USE_I18N = True
 USE_TZ = True
@@ -147,7 +151,7 @@ USE_TZ = True
 ######################################################
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 
 # heroku settings
