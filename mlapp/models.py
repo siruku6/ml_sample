@@ -1,6 +1,5 @@
-from datetime import date
-from statistics import mode
 from django.db import models
+from django.utils import timezone
 
 
 class Customer(models.Model):
@@ -27,7 +26,7 @@ class Customer(models.Model):
     result = models.IntegerField(blank=True, null=True)
     proba = models.FloatField(default=0.0)
     comment = models.CharField(max_length=200, blank=True, null=True)
-    registered_date = models.DateField(default=date.today())
+    registered_date = models.DateField(default=timezone.now)
 
     def __str__(self):
         if self.proba == 0.0:
