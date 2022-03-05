@@ -10,6 +10,9 @@ psycopg2-binary = "*"
 tzdata = "*"
 gunicorn = "*"
 django-heroku = "*"
+numpy = "*"
+joblib = "*"
+sklearn = "*"
 
 [dev-packages]
 mypy = "*"
