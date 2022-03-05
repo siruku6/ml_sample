@@ -1,0 +1,14 @@
+{% extends 'mlapp/templates/base.html' %}
+
+{% block content %}
+  <div class="container">
+    <h2 style="font-size: 30px">
+      {% if y == 0 %}
+        審査に落ちました(´；ω；｀)ﾌﾞﾜｯ
+      {% else %}
+        審査通過しました！！！\( ˙꒳˙ \三/ ˙꒳˙)/わーい
+      {% endif %}
+    </h2>
+    <p>この結果の信頼度（アテになると思われる確率）は {{ y_proba }} % でした。</p>
+  </div>
+{% endblock %}
