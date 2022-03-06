@@ -18,26 +18,35 @@
           <th>limited_balance</th>
           <th>result</th>
           <th>probability</th>
+          <th></th>
         </tr>
-        {% for consumer in object_list %}
+        {% for customer in customers %}
           <tr>
-            <td>{{ consumer.id }}</td>
-            <td>{{ consumer.registered_date }}</td>
-            <td>{{ consumer.last_name }}</td>
-            <td>{{ consumer.first_name }}</td>
-            <td>{{ consumer.age }}</td>
-            <td>{{ consumer.education }}</td>
-            <td>{{ consumer.limited_balance }}</td>
+            <td>{{ customer.id }}</td>
+            <td>{{ customer.registered_date }}</td>
+            <td>{{ customer.last_name }}</td>
+            <td>{{ customer.first_name }}</td>
+            <td>{{ customer.age }}</td>
+            <td>{{ customer.education }}</td>
+            <td>{{ customer.limited_balance }}</td>
             <td>
-              {% if consumer.result == 0 %}
+              {% if customer.result == 0 %}
                 審査に落ちました
-              {% elif consumer.result == 1 %}
+              {% elif customer.result == 1 %}
                 審査に受かりました
               {% else %}
                 -
               {% endif %}
             </td>
-            <td>{{ consumer.proba|floatformat:2 }}</td>
+            <td>{{ customer.proba|floatformat:2 }}</td>
+            <td>
+              <form class="delete" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-sm" name="d_id" value="{{ customer.id }}">
+                  Delete
+                </button>
+              </form>
+            </td>
           </tr>
         {% endfor %}
       </thead>

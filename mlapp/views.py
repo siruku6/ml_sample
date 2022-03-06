@@ -62,6 +62,11 @@ def result(request):
     )
 
 
-class CustomerList(ListView):
-    template_name = 'mlapp/templates/history.html'
-    model = Customer
+def history(request):
+    if request.method == 'POST':
+        d_id = request.POST['d_id']
+        d_customer = Customer.objects.filter(id=d_id)
+        d_customer.delete()
+
+    customers = Customer.objects.all()
+    return render(request, 'mlapp/templates/history.html', {'customers': customers})
