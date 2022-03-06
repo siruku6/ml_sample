@@ -10,6 +10,13 @@
   <body>
     <nav class="navbar navbar-light" style="background-color: #00b9f1;">
       <span class="navbar-brand mb-0 h1">Loan Reviewer</span>
+      {% if user.is_authenticated %}
+        <span style="font-size: 15px; text-align: right;">
+          <a href="{% url 'logout' %}" style="color: white; text-decoration: underline;">
+            Hello {{ user.username }}
+          </a>
+        </span>
+      {% endif %}
     </nav>
 
     <div class="contents" style="margin:0 20px">

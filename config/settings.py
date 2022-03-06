@@ -36,8 +36,9 @@ DEBUG = env('DEBUG', False)
 ALLOWED_HOSTS = ['*']
 
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = '/ml/'
-
+LOGIN_REDIRECT_URL = '/ml'
+LOGOUT_URL = 'logout'
+LOGOUT_REDIRECT_URL = '/ml/login'
 
 ###########################################
 #  Application definition (Core settings)
