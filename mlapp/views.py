@@ -1,7 +1,7 @@
 import joblib
 import numpy as np
 
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic import ListView
 from django.shortcuts import render, redirect
 
@@ -14,6 +14,10 @@ ml_model = joblib.load('ml_model/ml_model.pkl')
 
 class Login(LoginView):
     form_class = LoginForm
+    template_name = 'mlapp/templates/login.html'
+
+
+class Logout(LogoutView):
     template_name = 'mlapp/templates/login.html'
 
 
