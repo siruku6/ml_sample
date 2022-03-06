@@ -4,20 +4,10 @@
   <h1>Hello Loan Taker!</h1>
 
   <a href="{% url 'mlapp/input_form' %}">
-    <button type="button" class="btn btn-info">新規作成</button>
+    <button type="button" class="btn btn-info">新規顧客審査</button>
   </a>
 
-  <table class="table table-responsive table-hover table-sm">
-    <tr>
-      <th>id</th><th>last_name</th><th>first_name</th><th>age</th>
-    </tr>
-    {% for consumer in object_list %}
-      <tr>
-        <td>{{ consumer.id }}</td>
-        <td>{{ consumer.last_name }}</td>
-        <td>{{ consumer.first_name }}</td>
-        <td>{{ consumer.age }}</td>
-      </tr>
-    {% endfor %}
-  </table>
+  <a href="{% url 'history' %}">
+    <button type="button" class="btn btn-info">顧客一覧</button>
+  </a>
 {% endblock %}

@@ -10,9 +10,8 @@ from .models import Customer
 ml_model = joblib.load('ml_model/ml_model.pkl')
 
 
-class ConsumerList(ListView):
-    template_name = 'mlapp/templates/index.html'
-    model = Customer
+def index(request):
+    return render(request, 'mlapp/templates/index.html')
 
 
 def input_form(request):
@@ -50,3 +49,8 @@ def result(request):
         'mlapp/templates/result.html',
         {'y': y, 'y_proba': round(y_proba[y], 2)}
     )
+
+
+class CustomerList(ListView):
+    template_name = 'mlapp/templates/history.html'
+    model = Customer
