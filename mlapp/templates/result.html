@@ -10,5 +10,9 @@
       {% endif %}
     </h2>
     <p>この結果の信頼度（アテになると思われる確率）は {{ y_proba }} % でした。</p>
+
+    <a href="{% url 'history' %}">
+      <button type="button" class="btn btn-info">顧客一覧</button>
+    </a>
   </div>
 {% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'mlapp/templates/base.html' %}
+
+{% block title %}
+  顧客一覧
+{% endblock %}
+
+{% block content %}
+  <div class="container" style="margin-top: 20px;">
+    <table class="table table-responsive table-hover table-sm">
+      <thead class="thead-dark">
+        <tr>
+          <th>id</th>
+          <th>registered date</th>
+          <th>last_name</th>
+          <th>first_name</th>
+          <th>age</th>
+          <th>education</th>
+          <th>limited_balance</th>
+          <th>result</th>
+          <th>probability</th>
+        </tr>
+        {% for consumer in object_list %}
+          <tr>
+            <td>{{ consumer.id }}</td>
+            <td>{{ consumer.registered_date }}</td>
+            <td>{{ consumer.last_name }}</td>
+            <td>{{ consumer.first_name }}</td>
+            <td>{{ consumer.age }}</td>
+            <td>{{ consumer.education }}</td>
+            <td>{{ consumer.limited_balance }}</td>
+            <td>
+              {% if consumer.result == 0 %}
+                審査に落ちました
+              {% elif consumer.result == 1 %}
+                審査に受かりました
+              {% else %}
+                -
+              {% endif %}
+            </td>
+            <td>{{ consumer.proba|floatformat:2 }}</td>
+          </tr>
+        {% endfor %}
+      </thead>
+    </table>
+
+    <a href="{% url 'index' %}">
+      <button type="button" class="btn btn-info">Go to the top page</button>
+    </a>
+  </div>
+{% endblock %}
+

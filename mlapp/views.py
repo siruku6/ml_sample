@@ -1,18 +1,24 @@
 import joblib
 import numpy as np
 
+from django.contrib.auth.views import LoginView
 from django.views.generic import ListView
 from django.shortcuts import render, redirect
-from .forms import InputForm
+
+from .forms import LoginForm, InputForm
 from .models import Customer
 
 
 ml_model = joblib.load('ml_model/ml_model.pkl')
 
 
-class ConsumerList(ListView):
-    template_name = 'mlapp/templates/index.html'
-    model = Customer
+class Login(LoginView):
+    form_class = LoginForm
+    template_name = 'mlapp/templates/login.html'
+
+
+def index(request):
+    return render(request, 'mlapp/templates/index.html')
 
 
 def input_form(request):
@@ -50,3 +56,8 @@ def result(request):
         'mlapp/templates/result.html',
         {'y': y, 'y_proba': round(y_proba[y], 2)}
     )
+
+
+class CustomerList(ListView):
+    template_name = 'mlapp/templates/history.html'
+    model = Customer
