@@ -1,15 +1,37 @@
 import joblib
 import numpy as np
 
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
-from django.views.generic import ListView
 from django.shortcuts import render, redirect
 
-from .forms import LoginForm, InputForm
+from .forms import SignUpForm, LoginForm, InputForm
 from .models import Customer
 
 
 ml_model = joblib.load('ml_model/ml_model.pkl')
+
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            new_user = authenticate(
+                username=username, password=password
+            )
+            if new_user is not None:
+                login(request, new_user)
+            return redirect('index')
+    else:
+        form = SignUpForm()
+
+    return render(
+        request, 'mlapp/templates/signup.html', {'form': form}
+    )
 
 
 class Login(LoginView):
@@ -21,10 +43,12 @@ class Logout(LogoutView):
     template_name = 'mlapp/templates/login.html'
 
 
+@login_required
 def index(request):
     return render(request, 'mlapp/templates/index.html')
 
 
+@login_required
 def input_form(request):
     if request.method == 'POST':
         form = InputForm(request.POST)
@@ -36,6 +60,7 @@ def input_form(request):
         return render(request, 'mlapp/templates/input_form.html', {'form': form})
 
 
+@login_required
 def result(request):
     data = Customer.objects.order_by('id').reverse().values_list(
         # モデルを学習させた際のカラムの順番
@@ -62,6 +87,7 @@ def result(request):
     )
 
 
+@login_required
 def history(request):
     if request.method == 'POST':
         d_id = request.POST['d_id']
