@@ -10,7 +10,7 @@ from .forms import SignUpForm, LoginForm, InputForm
 from .models import Customer
 
 
-ml_model = joblib.load('ml_model/ml_model.pkl')
+ml_model = joblib.load('ml_models/mlapp/ml_model.pkl')
 
 
 def signup(request):
