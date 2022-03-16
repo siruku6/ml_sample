@@ -2,6 +2,8 @@
 #   Custom ignored files
 ####################################
 requirements.txt
+media/images/*
+!media/images/.keep
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

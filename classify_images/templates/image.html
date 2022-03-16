@@ -1,0 +1,31 @@
+{% extends 'mlapp/templates/base.html' %}
+
+{% block content %}
+  <div class="container">
+    <img src="{{ img_url }}" alt="" width="300">
+    <p>
+      <span>判定結果：</span>
+      <span>{{class}}</span>
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>クラス</th>
+          <th>確率</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for name, prob in probabilities.items %}
+          <tr>
+            <td>{{ name }}</td>
+            <td>{{ prob }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <a href="{% url 'image_upload' %}">
+    <button type="button" class="btn btn-info">トップ画面へ</button>
+  </a>
+{% endblock %}

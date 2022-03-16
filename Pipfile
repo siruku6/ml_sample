@@ -13,6 +13,10 @@ django-heroku = "*"
 numpy = "*"
 joblib = "*"
 sklearn = "*"
+pillow = "*"
+torch = "*"
+pytorch-lightning = "*"
+torchvision = "*"
 
 [dev-packages]
 mypy = "*"
