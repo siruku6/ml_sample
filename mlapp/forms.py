@@ -10,7 +10,8 @@ class SignUpForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        for field in self.fields.values():
+        for field, id_str in zip(self.fields.values(), ('username', 'password1', 'password2',)):
+            field.widget.attrs['id'] = id_str
             field.widget.attrs['class'] = 'form-control'
             field.widget.attrs['placeholder'] = field.label
 
@@ -23,7 +24,8 @@ class LoginForm(AuthenticationForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
-        for field in self.fields.values():
+        for field, id_str in zip(self.fields.values(), ('username', 'password')):
+            field.widget.attrs['id'] = id_str
             field.widget.attrs['class'] = 'form-control'
             field.widget.attrs['placeholder'] = field.label
 
