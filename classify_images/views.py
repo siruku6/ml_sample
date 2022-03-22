@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 import numpy as np
 
@@ -5,6 +6,7 @@ from .forms import ImageForm
 from ml_models.classify_images import infer
 
 
+@login_required
 def image_upload(request):
     if request.method == 'POST':
         form = ImageForm(request.POST, request.FILES)
@@ -26,7 +28,10 @@ def image_upload(request):
             return render(
                 request,
                 'classify_images/templates/image.html',
-                {'img_url': img_url, 'probabilities': dict_probs, 'class': cls}
+                {
+                    'img_url': img_url, 'probabilities': dict_probs,
+                    'class': cls, 'cls_prob': dict_probs[cls]
+                }
             )
     else:
         form = ImageForm()
