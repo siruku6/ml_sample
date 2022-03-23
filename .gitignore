@@ -6,6 +6,8 @@ media/images/*
 ml_models/*/*.pt
 log/*
 !log/.keep
+Pipfile
+Pipfile.lock
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
