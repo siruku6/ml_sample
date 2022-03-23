@@ -1,7 +1,6 @@
 ####################################
 #   Custom ignored files
 ####################################
-requirements.txt
 media/images/*
 !media/images/.keep
 ml_models/*/*.pt
