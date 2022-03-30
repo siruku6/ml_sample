@@ -33,7 +33,8 @@ VIRTUAL_ENVIRONMENT = env('ENVIRONMENT')
 # SECURITY WARNING: keep the secret key used in production secret!
 ####################
 SECRET_KEY = env('SECRET_KEY')
-DEBUG = env('DEBUG', False)
+# DEBUG = env('DEBUG', False)
+DEBUG = True  # MEDIA_URLを有効化するための暫定的措置
 ALLOWED_HOSTS = ['*']
 
 LOGIN_URL = 'login'
@@ -158,6 +159,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# NOTE: DEBUG = False だと動かんよ
+# https://sinyblog.com/django/media_file_001/#DEBUGFalse
+# https://rurukblog.com/post/Django-debug-false/
+# https://jpcodeqa.com/q/4d05199e064cb6b60d1cc61fdc239ce0
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
