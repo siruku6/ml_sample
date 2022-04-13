@@ -1,9 +1,10 @@
 ####################################
 #   Custom ignored files
 ####################################
-requirements.txt
 media/images/*
 !media/images/.keep
+Pipfile
+Pipfile.lock
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
