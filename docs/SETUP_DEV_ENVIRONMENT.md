@@ -18,4 +18,4 @@ Then, you can access
 - Django Admin  
 `localhost:8000/admin`
 - App Top  
-`localhost:8000/hello`
+`localhost:8000`
