@@ -17,6 +17,7 @@ pillow = "*"
 torch = "*"
 pytorch-lightning = "*"
 torchvision = "*"
+opencv-python = "*"
 
 [dev-packages]
 mypy = "*"

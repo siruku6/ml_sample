@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'mlapp',
     'classify_images',
+    'detect_expression',
 ]
 
 MIDDLEWARE = [

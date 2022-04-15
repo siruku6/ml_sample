@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('ml/', include('mlapp.urls')),
     path('', include('classify_images.urls')),
+    path('detect/', include('detect_expression.urls')),
 ]
