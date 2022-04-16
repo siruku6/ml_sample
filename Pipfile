@@ -6,17 +6,19 @@ name = "pypi"
 [packages]
 django = "*"
 django-environ = "*"
+django-heroku = "*"
+# django-sslserver = "*"
+gunicorn = "*"
 psycopg2-binary = "*"
 tzdata = "*"
-gunicorn = "*"
-django-heroku = "*"
 numpy = "*"
 joblib = "*"
-sklearn = "*"
+opencv-python = "*"
 pillow = "*"
+sklearn = "*"
 torch = "*"
-pytorch-lightning = "*"
 torchvision = "*"
+pytorch-lightning = "*"
 
 [dev-packages]
 mypy = "*"
@@ -25,3 +27,6 @@ django-stubs = "*"
 
 [requires]
 python_version = "3.9"
+
+[scripts]
+server = "python3 manage.py runserver 0.0.0.0:8000"

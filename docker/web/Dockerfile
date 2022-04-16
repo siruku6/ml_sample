@@ -1,7 +1,7 @@
 FROM python:3.9-slim
 
-RUN apt-get -y update && apt-get -y upgrade
-RUN apt-get -y install \
+RUN apt -y update && apt -y upgrade
+RUN apt -y install \
     # Necessary for pip install
     gcc g++ libc-dev \
     # For psycopg2 (postgresql client)
@@ -10,7 +10,10 @@ RUN apt-get -y install \
     bash vim \
     # For scikit-learn (scipy)
     gfortran libopenblas-dev liblapack-dev \
-    && apt-get clean \
+    # For opencv-python
+    libopencv-dev \
+    # libgl1-mesa-dev \
+    && apt clean \
     && rm -rf /var/lib/apt/lists/*
 
 # for updating python module
