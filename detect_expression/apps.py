@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class HelloworldappConfig(AppConfig):
+class DetectExpressionConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'helloworldapp'
+    name = 'detect_expression'

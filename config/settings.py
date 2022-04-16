@@ -52,9 +52,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'helloworldapp',
     'mlapp',
     'classify_images',
+    'detect_expression',
 ]
 
 MIDDLEWARE = [

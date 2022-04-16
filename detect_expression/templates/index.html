@@ -1,0 +1,43 @@
+{% extends 'mlapp/templates/base.html' %}
+{% csrf_token %}
+{% load static %}
+
+{% block page_title %}Detect Expression{% endblock %}
+{% block page_head_title %}Top page{% endblock %}
+
+{% block content %}
+  <!-- <div>
+    <div id="image_area">
+      <img src="/detect/live" width="810" height="540" />
+    </div>
+  </div> -->
+
+  <!-- Sample1 -->
+    <!-- カメラ映像が描画されます。 -->
+    <video id="video_area" style="background-color: #000" autoplay></video>
+
+    <!-- 押下するとカメラ映像描画を開始します。 -->
+    <button id="start_btn">映像表示開始</button>
+
+    <!-- 押下するとカメラ映像から静止画をキャプチャします。 -->
+    <button id="take_btn">静止画取得</button>
+
+    <!-- キャプチャした静止画が描画されます。 -->
+    <canvas id="streamCanvas"></canvas>
+  <!-- Sample1 -->
+
+  <!-- Sample2 -->
+    <video autoplay playsinline id="videoElement"></video>
+    <canvas id="canvas" width="400" height="300"></canvas>
+  <!-- Sample2 -->
+
+{% endblock %}
+
+{% block extra_js %}
+  <script type="text/javascript">
+    var url_start_webcam = "{% url 'predict' %}";
+    var csrf_token = "{{ csrf_token }}"
+  </script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
+  <script type="text/javascript" src="{% static 'javascripts/camera_util.js' %}"></script>
+{% endblock %}
