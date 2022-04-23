@@ -63,6 +63,11 @@ function countdown() {
 }
 
 
+// ---------------------------------------------------------------
+//   Util function
+// ---------------------------------------------------------------
+const $resultImg = document.getElementById('result-img');
+
 function sendImageOfCampas($video, $canvas) {
   const imageInCanvas = $canvas.getContext('2d');
   imageInCanvas.drawImage(
@@ -76,7 +81,7 @@ function sendImageOfCampas($video, $canvas) {
     data: {image: imageData, csrfmiddlewaretoken: csrf_token,},
     success: function(data) {
       console.log(data)
-      return data
+      $resultImg.setAttribute('src', data);
     },
     error: function(_response) {
       console.log('Error')
