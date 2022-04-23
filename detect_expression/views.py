@@ -1,9 +1,14 @@
 import base64
-import cv2
+import io
+
 from django.http import StreamingHttpResponse
 from django.http.response import JsonResponse
 from django.shortcuts import render
 from django.views import View
+
+# For image
+import cv2
+from PIL import Image, ImageDraw
 
 
 class IndexView(View):
@@ -12,20 +17,36 @@ class IndexView(View):
 
 
 def start_webcam(request):
+    def frame_to_img(frame) -> Image.Image:
+        frame_str: str = str(frame)
+        data: str = (
+            frame_str
+            .replace('data:image/jpeg;base64,', '')
+            .replace(' ', '+')
+        )
+        base64_decoded: bytes = base64.b64decode(data)
+        image: Image.Image = Image.open(io.BytesIO(base64_decoded))
+
+        # filename = 'some_image.jpg'
+        # with open(filename, 'wb') as f:
+        #     f.write(base64_decoded)
+        return image
+
     if (request.method == 'POST'):
         try:
             frame_ = request.POST.get('image')
-            frame_ = str(frame_)
-            data = frame_.replace('data:image/jpeg;base64,', '')
-            data = data.replace(' ', '+')
-            imgdata = base64.b64decode(data)
-            filename = 'some_image.jpg'
-            with open(filename, 'wb') as f:
-                f.write(imgdata)
+            image: Image.Image = frame_to_img(frame_)
+
+            draw = ImageDraw.Draw(image, 'RGB')
+            draw.rectangle((50, 50, 200, 200), fill=None, outline=(255, 255, 255), width=5)
+
+            filename = './some_image2.jpg'
+            image.save(filename, quality=95)
         except Exception as e:
             print(f'Error: {e}')
 
-    return JsonResponse({'Json': data})
+    return JsonResponse({'Json': ''})
+    # return JsonResponse({'Json': data})
 
 
 # ---------------------------------------------------------------
