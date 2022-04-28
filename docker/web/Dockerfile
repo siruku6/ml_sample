@@ -10,9 +10,8 @@ RUN apt -y install \
     bash vim \
     # For scikit-learn (scipy)
     gfortran libopenblas-dev liblapack-dev \
-    # For opencv-python
-    libopencv-dev \
-    # libgl1-mesa-dev \
+    # # For opencv-python
+    # libopencv-dev \
     && apt clean \
     && rm -rf /var/lib/apt/lists/*
 
