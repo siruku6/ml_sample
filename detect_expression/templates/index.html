@@ -2,34 +2,25 @@
 {% csrf_token %}
 {% load static %}
 
-{% block page_title %}Detect Expression{% endblock %}
-{% block page_head_title %}Top page{% endblock %}
+{% block title %}Detect Expression{% endblock %}
+{% block header %}Top page{% endblock %}
 
 {% block content %}
-  <!-- <div>
-    <div id="image_area">
-      <img src="/detect/live" width="810" height="540" />
-    </div>
-  </div> -->
+  <!-- カメラ映像が描画されます。 -->
+  <video id="video_area" style="background-color: #000" autoplay></video>
 
-  <!-- Sample1 -->
-    <!-- カメラ映像が描画されます。 -->
-    <video id="video_area" style="background-color: #000" autoplay></video>
+  <!-- 押下するとカメラ映像描画を開始します。 -->
+  <button id="start_btn">映像表示開始</button>
 
-    <!-- 押下するとカメラ映像描画を開始します。 -->
-    <button id="start_btn">映像表示開始</button>
+  <!-- 押下するとカメラ映像から静止画をキャプチャします。 -->
+  <button id="take_btn">静止画取得</button>
 
-    <!-- 押下するとカメラ映像から静止画をキャプチャします。 -->
-    <button id="take_btn">静止画取得</button>
+  <!-- 押下すると、20秒の間、カメラ映像のStreamingをDjangoに送信します。 -->
+  <button id="send-stream">映像解析（20秒間）</button>
 
-    <!-- キャプチャした静止画が描画されます。 -->
-    <canvas id="streamCanvas"></canvas>
-  <!-- Sample1 -->
-
-  <!-- Sample2 -->
-    <video autoplay playsinline id="videoElement"></video>
-    <canvas id="canvas" width="400" height="300"></canvas>
-  <!-- Sample2 -->
+  <!-- 静止画、映像を撮影して送信するために必要な要素 -->
+  <!-- hiddenにする必要はないが、見栄えをよくするためにhiddenをつけて隠している。 -->
+  <canvas id="streamCanvas" hidden></canvas>
 
 
   <div id="image-area">

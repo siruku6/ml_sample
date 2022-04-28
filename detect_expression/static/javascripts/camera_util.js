@@ -7,60 +7,54 @@ if (typeof navigator.mediaDevices.getUserMedia !== 'function') {
 
 
 // ---------------------------------------------------------------
-//   Easy sample for showing stream from web-camera of PC
+//   Showing stream from web-camera of PC
 // ---------------------------------------------------------------
-// 操作する画面エレメント変数定義します。
-const $start = document.getElementById('start_btn');   // スタートボタン
-const $video1 = document.getElementById('video_area');  // 映像表示エリア
-const $take = document.getElementById('take_btn');     // 撮影ボタン
-const $canvas1 = document.getElementById('streamCanvas');  // 撮影image描画先
-$video1.width = 640;
-$video1.height = 480;
+// 画面上の要素を変数に代入
+const $video1 = document.getElementById('video_area');      // 映像表示エリア
+const $canvas1 = document.getElementById('streamCanvas');   // 撮影image描画先
+const $start = document.getElementById('start_btn');        // スタートボタン
+const $take = document.getElementById('take_btn');          // 静止画撮影ボタン
+const $sendStream = document.getElementById('send-stream'); // ストリーミング送信ボタン
+$video1.width = 400;
+$video1.height = 300;
 
-// 「スタートボタン」を押下したら、getUserMedia を使って映像を「映像表示エリア」に表示してね。
+// 1. 「映像取得開始」ボタンを押下したら、getUserMedia を使って映像を「映像表示エリア」に表示
 $start.addEventListener('click', () => {
   navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-  .then(stream => $video1.srcObject = stream)
+  .then(
+    stream => $video1.srcObject = stream
+    // $video1.play();
+  )
   .catch(err => alert(`${err.name} ${err.message}`));
 }, false);
 
-// 「静止画取得」ボタンが押されたら「<canvas id="streamCanvas">」に映像のコマ画像を表示します。
+// 2. 「静止画取得」ボタンが押されたら「<canvas id="streamCanvas">」にコマ画像を表示
 $take.addEventListener('click', () => {
-  // canvasに『「静止画取得」ボタン』押下時点の画像を描画。
-  $canvas1.width  = $video1.videoWidth;
-  $canvas1.height = $video1.videoHeight;
   sendImageOfCampas($video1, $canvas1)
+}, false);
+
+// 3. 「映像解析」ボタンが押されたら「<canvas id="streamCanvas">」に映像のコマ画像を表示します。
+$sendStream.addEventListener('click', () => {
+  let timeLeft = 20;
+  const timerId = setInterval(sendStream20Seconds, 500);
+
+  function sendStream20Seconds() {
+    if (timeLeft == 0) {
+      clearTimeout(timerId);
+      return '..'
+    } else {
+      timeLeft--;
+      sendImageOfCampas($video1, $canvas1);
+    }
+  }
 }, false);
 
 
 // ---------------------------------------------------------------
 //   Easy sample for showing stream and send picture to django
 // ---------------------------------------------------------------
-const $videoElem2 = document.getElementById('videoElement');
-const $canvas2 = document.getElementById('canvas');
-$videoElem2.width = 400;
-$videoElem2.height = 300;
-
-if (navigator.mediaDevices.getUserMedia) {
-  navigator.mediaDevices.getUserMedia({video: true})
-  .then(function(stream) {
-    $videoElem2.srcObject = stream;
-    // $videoElem2.play();
-  })
-  .catch(function(_error) {});
-}
-let timeLeft = 20;
-const timerId = setInterval(countdown, 500);
-
-function countdown() {
-  if (timeLeft == 0) {
-    clearTimeout(timerId);
-    return '..'
-  } else {
-    timeLeft--;
-    sendImageOfCampas($videoElem2, $canvas2);
-  }
-}
+// Removed
+// Reference: https://qiita.com/qiita_mona/items/e58943cf74c40678050a
 
 
 // ---------------------------------------------------------------
@@ -69,6 +63,11 @@ function countdown() {
 const $resultImg = document.getElementById('result-img');
 
 function sendImageOfCampas($video, $canvas) {
+  // $canvas.width  = $video.videoWidth;
+  // $canvas.height = $video.videoHeight;
+  $canvas.width  = $video.width;
+  $canvas.height = $video.height;
+
   const imageInCanvas = $canvas.getContext('2d');
   imageInCanvas.drawImage(
     $video, 0, 0, $video.width, $video.height
