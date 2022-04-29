@@ -4,6 +4,7 @@
 requirements.txt
 media/images/*
 !media/images/.keep
+ml_models/*/*.pt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
