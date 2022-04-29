@@ -8,8 +8,8 @@ RUN apt -y install \
     libpq-dev \
     # For development and debug
     bash vim \
-    # For scikit-learn (scipy)
-    gfortran libopenblas-dev liblapack-dev \
+    # # For scikit-learn (scipy)
+    # gfortran libopenblas-dev liblapack-dev \
     # # For opencv-python
     # libopencv-dev \
     && apt clean \
