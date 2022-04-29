@@ -1,11 +1,18 @@
+import os
 from typing import List, Tuple
 
+import boto3
 import numpy as np
 from PIL import Image
 import pytorch_lightning as pl
 import torch
 from torchvision.models import resnet18
 from torchvision import transforms
+
+import ml_models.model_file_loader as model_file_loader
+
+MODEL_FILE_NAME: str = 'posture_4_classes_model.pt'
+MODEL_FILE_PATH: str = f'ml_models/classify_images/{MODEL_FILE_NAME}'
 
 
 class PredPostureNet(pl.LightningModule):
@@ -20,12 +27,27 @@ class PredPostureNet(pl.LightningModule):
         return h1
 
 
+class ModelInitializer:
+    def __init__(self):
+        if not os.path.isfile(MODEL_FILE_PATH):
+            model_file_loader.load(
+                bucket='classify-posture',
+                source_filepath=MODEL_FILE_NAME,
+                target_filepath=MODEL_FILE_PATH,
+            )
+
+    def load_model(self) -> PredPostureNet:
+        # 推論モードへの切り替え .eval()
+        net: PredPostureNet = PredPostureNet().cpu().eval()
+        net.load_state_dict(torch.load(MODEL_FILE_PATH))
+        return net
+
+
 class Inference:
     def __init__(self):
-        # 推論モードへの切り替え .eval()
-        self.net: PredPostureNet = PredPostureNet().cpu().eval()
-        network_file_name: str = 'ml_models/classify_images/classify_posture_network.pt'
-        self.net.load_state_dict(torch.load(network_file_name))
+        model_init: ModelInitializer = ModelInitializer()
+        self.net: PredPostureNet = model_init.load_model()
+        self.net.load_state_dict(torch.load(MODEL_FILE_PATH))
         self.class_names: List[str] = ['handstand', 'lying_down', 'sit', 'stand']
 
     def run(self, image_name: str) -> Tuple[np.ndarray, int]:

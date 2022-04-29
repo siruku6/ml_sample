@@ -3,6 +3,7 @@
 ####################################
 media/images/*
 !media/images/.keep
+ml_models/*/*.pt
 Pipfile
 Pipfile.lock
 
