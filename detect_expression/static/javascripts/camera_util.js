@@ -79,8 +79,8 @@ function sendImageOfCampas($video, $canvas) {
     url: url_start_webcam,
     data: {image: imageData, csrfmiddlewaretoken: csrf_token,},
     success: function(data) {
-      console.log(data)
-      $resultImg.setAttribute('src', data);
+      // console.log(data)
+      $resultImg.setAttribute('src', data.image);
     },
     error: function(_response) {
       console.log('Error')

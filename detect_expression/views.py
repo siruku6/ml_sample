@@ -1,59 +1,56 @@
-import base64
-import io
+import traceback
 
-from django.http.response import HttpResponse
+from django.http import JsonResponse
+# from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.views import View
 
-from PIL import Image, ImageDraw
+from PIL import Image
+from torch import positive
+
+from config import logger
+import lib.image_processor as img_processor
+from ml_models.detect_expression.detect import Detection
 
 
 class IndexView(View):
     def get(self, request):
+        # NOTE: load model file from S3 and set resnet18 model in advance
+        #   by initializing this class
+        Detection()
+
         return render(request, 'detect_expression/templates/index.html', {})
 
 
 def start_webcam(request):
-    def frame_to_img(frame) -> Image.Image:
-        frame_str: str = str(frame)
-        data: str = (
-            frame_str
-            .replace('data:image/jpeg;base64,', '')
-            .replace(' ', '+')
-        )
-        base64_decoded: bytes = base64.b64decode(data)
-        # filename = 'some_image.jpg'
-        # with open(filename, 'wb') as f:
-        #     f.write(base64_decoded)
-
-        image: Image.Image = Image.open(io.BytesIO(base64_decoded))
-        return image
-
-    def draw_box_and_text(image: Image.Image) -> None:
-        draw = ImageDraw.Draw(image, 'RGB')
-        draw.rectangle((50, 50, 200, 200), fill=None, outline=(255, 255, 255), width=5)
-
-    def image_to_base64(image) -> bytes:
-        img_byte_arr = io.BytesIO()
-        image.save(img_byte_arr, format=image.format)
-        bytes_arr: bytes = img_byte_arr.getvalue()
-        return base64.b64encode(bytes_arr)
-
-    def add_marker(base64_arr: bytes) -> bytes:
-        return b'data:image/jpeg;base64,' + base64_arr
-
     if (request.method == 'POST'):
         try:
             frame_ = request.POST.get('image')
-            image: Image.Image = frame_to_img(frame_)
-            draw_box_and_text(image)
-            base64_arr: bytes = image_to_base64(image)
-            base64_with_marker: bytes = add_marker(base64_arr)
+            image: Image.Image = img_processor.to_image(frame_)
 
-            # NOTE: not necessary but this can save image on OS
-            # filename = './some_image2.jpg'
-            # image.save(filename, quality=95)
-        except Exception as e:
-            print(f'Error: {e}')
+            # NOTE: locate captured image on OS
+            filename = f'{request.user.username}.jpg'
+            image.save(f'media/images/{filename}', quality=95)
 
-        return HttpResponse(base64_with_marker, content_type='application/octet-stream')
+            detection_instance: Detection = Detection()
+            # NOTE: This (run) needs that image is located on OS.
+            positive_level: float = detection_instance.run(image_name=filename)
+            logger.info(f'positive level: {positive_level}')
+
+            img_processor.draw_box_and_text(image, text=f'Positive Level = {positive_level}')
+            base64: str = img_processor.to_base64(image)
+        except Exception:
+            logger.error(traceback.format_exc())
+
+        # NOTE: この書き方の時は、 $resultImg.setAttribute('src', data); で描画できる
+        #   ただし、
+        #       b'data:image/jpeg;base64,' + base64_arr
+        #   とする必要がある (最後の`.decode()` は不要)
+        # return HttpResponse(base64_with_marker, content_type='application/octet-stream')
+
+        return JsonResponse(
+            {
+                'positive_level': positive_level,
+                'image': base64,
+            }
+        )
