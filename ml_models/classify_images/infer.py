@@ -1,7 +1,5 @@
-import os
 from typing import List, Tuple
 
-import boto3
 import numpy as np
 from PIL import Image
 import pytorch_lightning as pl
@@ -9,10 +7,7 @@ import torch
 from torchvision.models import resnet18
 from torchvision import transforms
 
-import ml_models.model_file_loader as model_file_loader
-
-MODEL_FILE_NAME: str = 'posture_4_classes_model.pt'
-MODEL_FILE_PATH: str = f'ml_models/classify_images/{MODEL_FILE_NAME}'
+from ml_models.model_initializer import ModelInitializer
 
 
 class PredPostureNet(pl.LightningModule):
@@ -27,33 +22,23 @@ class PredPostureNet(pl.LightningModule):
         return h1
 
 
-class ModelInitializer:
-    def __init__(self):
-        if not os.path.isfile(MODEL_FILE_PATH):
-            model_file_loader.load(
-                bucket='classify-posture',
-                source_filepath=MODEL_FILE_NAME,
-                target_filepath=MODEL_FILE_PATH,
-            )
-
-    def load_model(self) -> PredPostureNet:
-        # 推論モードへの切り替え .eval()
-        net: PredPostureNet = PredPostureNet().cpu().eval()
-        net.load_state_dict(torch.load(MODEL_FILE_PATH))
-        return net
-
-
 class Inference:
     def __init__(self):
-        model_init: ModelInitializer = ModelInitializer()
-        self.net: PredPostureNet = model_init.load_model()
-        self.net.load_state_dict(torch.load(MODEL_FILE_PATH))
+        BUCKET_NAME: str = 'classify-posture'
+        MODEL_SOURCE_NAME: str = 'posture_4_classes_model.pt'
+        MODEL_FILE_PATH: str = f'ml_models/classify_images/{MODEL_SOURCE_NAME}'
+        initializer: ModelInitializer = ModelInitializer(
+            BUCKET_NAME, MODEL_SOURCE_NAME, MODEL_FILE_PATH
+        )
+
+        self.net: PredPostureNet = initializer.init_model(network_class=PredPostureNet)
         self.class_names: List[str] = ['handstand', 'lying_down', 'sit', 'stand']
 
     def run(self, image_name: str) -> Tuple[np.ndarray, int]:
         path: str = self._image_file_path(image_name)
         image = self._prepare_image(path)
-        y = self.net(image)
+        with torch.no_grad():
+            y = self.net(image)
 
         # NOTE: 1行しかないので 0 で次元を落とす
         result: np.ndarray = y.softmax(dim=-1).detach().numpy()[0]
