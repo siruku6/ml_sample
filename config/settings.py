@@ -165,3 +165,51 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # heroku settings
 import django_heroku
 django_heroku.settings(locals())
+
+
+###########################
+#         Logging
+###########################
+LOGGING = {
+    'version': 1,
+    # Don't disable logger settings already exist
+    'disable_existing_loggers': False,
+    'formatters': {
+        'default': {
+            'format': '%(asctime)s [%(levelname)s] %(process)d %(thread)d %(message)s '
+                      '%(pathname)s:%(lineno)d',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+        'console': {
+            'format': '%(asctime)s [%(levelname)s] %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': 'log/app.log',
+            'maxBytes': 50000,
+            'backupCount': 3,
+            'formatter': 'default',
+        },
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'console',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'propagate': False,
+        },
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
