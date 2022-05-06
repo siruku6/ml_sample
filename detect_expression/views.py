@@ -6,7 +6,6 @@ from django.shortcuts import render
 from django.views import View
 
 from PIL import Image
-from torch import positive
 
 from config import logger
 import lib.image_processor as img_processor
