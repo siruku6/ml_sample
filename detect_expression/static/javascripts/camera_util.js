@@ -30,18 +30,24 @@ $start.addEventListener('click', () => {
 
 // 2. 「静止画取得」ボタンが押されたら「<canvas id="streamCanvas">」にコマ画像を表示
 $take.addEventListener('click', () => {
-  sendImageOfCampas($video1, $canvas1)
+  sendImageOfCampas($video1, $canvas1);
 }, false);
 
 // 3. 「映像解析」ボタンが押されたら「<canvas id="streamCanvas">」に映像のコマ画像を表示します。
+const $progressBar = document.getElementById('left-time');    // プログレスバー
+const maxTime = 50;
 $sendStream.addEventListener('click', () => {
-  let timeLeft = 20;
-  const timerId = setInterval(sendStream20Seconds, 500);
+  let timeLeft = 50;
+  const timerId = setInterval(sendStream20Seconds, 400);
 
   function sendStream20Seconds() {
+    let leftPercentage = Math.ceil(timeLeft / maxTime * 100);
+    $progressBar.style.width = `${leftPercentage}%`;
+    $progressBar.innerHTML = `残り時間: ${leftPercentage}%`;
+
     if (timeLeft == 0) {
       clearTimeout(timerId);
-      return '..'
+      return '..';
     } else {
       timeLeft--;
       sendImageOfCampas($video1, $canvas1);
@@ -61,6 +67,8 @@ $sendStream.addEventListener('click', () => {
 //   Util function
 // ---------------------------------------------------------------
 const $resultImg = document.getElementById('result-img');
+const $bestFaceImg = document.getElementById('best-face');
+const $bestPercentageBoard = document.getElementById('best-percentage');  // 最も明るい表情のPercentageを表示
 
 function sendImageOfCampas($video, $canvas) {
   // $canvas.width  = $video.videoWidth;
@@ -79,11 +87,16 @@ function sendImageOfCampas($video, $canvas) {
     url: url_start_webcam,
     data: {image: imageData, csrfmiddlewaretoken: csrf_token,},
     success: function(data) {
-      // console.log(data)
+      console.log(data);
       $resultImg.setAttribute('src', data.image);
+
+      if (data.positive_level > parseFloat($bestPercentageBoard.innerText)) {
+        $bestPercentageBoard.innerText = data.positive_level;
+        $bestFaceImg.setAttribute('src', data.image);
+      }
     },
     error: function(_response) {
-      console.log('Error')
+      console.log('Error');
     },
   });
 }
